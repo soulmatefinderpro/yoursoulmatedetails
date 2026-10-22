@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Your Soulmate Details">
+  <title>Your Soulmate Details</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg: #160d26;
+      --card-bg: #fffafc;
+      --text: #2c173d;
+      --muted: #75627e;
+      --accent: #c34f83;
+      --accent-dark: #84315e;
+      --gold: #d7a84c;
+      --border: #ead5e4;
+      --shadow: 0 24px 70px rgba(8, 3, 18, 0.42);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-width: 320px;
+      background: var(--page-bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: clamp(16px, 4vw, 48px);
+      display: grid;
+      place-items: center;
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(142, 73, 157, 0.48), transparent 28rem),
+        radial-gradient(circle at 90% 100%, rgba(194, 67, 125, 0.28), transparent 25rem),
+        var(--page-bg);
+    }
+
+    main {
+      width: min(100%, 760px);
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: var(--card-bg);
+      box-shadow: var(--shadow);
+      background: linear-gradient(145deg, #fffafd, #fff5fa);
+    }
+
+    .image-wrap {
+      width: 100%;
+      padding: clamp(10px, 2vw, 18px);
+      background: #fff;
+    }
+
+    .image-wrap img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 14px;
+      object-fit: contain;
+    }
+
+    .content {
+      padding: clamp(24px, 5vw, 42px);
+      text-align: center;
+    }
+
+    h1 {
+      position: relative;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.9rem, 5vw, 2.75rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: #4b235f;
+      text-shadow: 0 0 0 rgba(195, 79, 131, 0);
+      animation: titleGlow 4s ease-in-out infinite;
+    }
+
+    h1::after {
+      content: "✦";
+      display: inline-block;
+      margin-left: 0.35em;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 0.62em;
+      vertical-align: 0.2em;
+      animation: sparkle 2.8s ease-in-out infinite;
+    }
+
+    .prompt {
+      margin: 22px 0 14px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.8vw, 1.1rem);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .rating {
+      position: relative;
+      display: inline-flex;
+      flex-direction: row-reverse;
+      justify-content: center;
+      gap: clamp(3px, 1vw, 8px);
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff8fc;
+      box-shadow: 0 0 0 rgba(215, 168, 76, 0), 0 8px 22px rgba(195, 79, 131, 0.08);
+      animation: ratingAura 4.5s ease-in-out infinite;
+    }
+
+    .rating::before,
+    .rating::after {
+      position: absolute;
+      color: var(--gold);
+      font-size: 0.8rem;
+      opacity: 0;
+      pointer-events: none;
+      content: "✦";
+      animation: orbitSparkle 3.8s ease-in-out infinite;
+    }
+
+    .rating::before {
+      top: -12px;
+      left: 16%;
+    }
+
+    .rating::after {
+      right: 13%;
+      bottom: -12px;
+      animation-delay: 1.8s;
+    }
+
+    .rating input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .rating label {
+      color: #dccbd6;
+      cursor: pointer;
+      font-size: clamp(2rem, 9vw, 3rem);
+      line-height: 1;
+      transition: color 160ms ease, transform 160ms ease;
+      -webkit-tap-highlight-color: transparent;
+      animation: starTwinkle 3.8s ease-in-out infinite;
+    }
+
+    .rating label:nth-of-type(2) {
+      animation-delay: 0.35s;
+    }
+
+    .rating label:nth-of-type(3) {
+      animation-delay: 0.7s;
+    }
+
+    .rating label:nth-of-type(4) {
+      animation-delay: 1.05s;
+    }
+
+    .rating label:nth-of-type(5) {
+      animation-delay: 1.4s;
+    }
+
+    .rating label:hover,
+    .rating label:hover ~ label,
+    .rating input:checked ~ label {
+      color: var(--accent);
+    }
+
+    .rating label:hover {
+      transform: scale(1.08);
+    }
+
+    .rating input:focus-visible + label {
+      outline: 3px solid rgba(217, 79, 134, 0.35);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+    .feedback-form {
+      max-width: 560px;
+      margin: 24px auto 0;
+      text-align: left;
+    }
+
+    .feedback-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4b235f;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .feedback-input {
+      display: block;
+      width: 100%;
+      min-height: 112px;
+      resize: vertical;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      outline: none;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.8);
+      font: inherit;
+      line-height: 1.5;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .feedback-input::placeholder {
+      color: #aa96ab;
+    }
+
+    .feedback-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(195, 79, 131, 0.13);
+    }
+
+    .submit-button {
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px 20px;
+      border: 0;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #8f3c76);
+      box-shadow: 0 8px 18px rgba(143, 60, 118, 0.23);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(143, 60, 118, 0.3);
+    }
+
+    .submit-button:focus-visible {
+      outline: 3px solid rgba(215, 168, 76, 0.55);
+      outline-offset: 3px;
+    }
+
+    .rating-status {
+      min-height: 1.5em;
+      margin: 12px 0 0;
+      color: var(--accent-dark);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .feedback-status {
+      min-height: 1.5em;
+      margin: 10px 0 0;
+      color: var(--accent-dark);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% {
+        text-shadow: 0 0 0 rgba(195, 79, 131, 0);
+      }
+      50% {
+        text-shadow: 0 0 18px rgba(195, 79, 131, 0.3), 0 0 34px rgba(215, 168, 76, 0.14);
+      }
+    }
+
+    @keyframes sparkle {
+      0%, 100% {
+        opacity: 0.45;
+        transform: scale(0.8) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.25) rotate(18deg);
+      }
+    }
+
+    @keyframes ratingAura {
+      0%, 100% {
+        box-shadow: 0 0 0 rgba(215, 168, 76, 0), 0 8px 22px rgba(195, 79, 131, 0.08);
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(215, 168, 76, 0.22), 0 10px 30px rgba(195, 79, 131, 0.16);
+      }
+    }
+
+    @keyframes starTwinkle {
+      0%, 100% {
+        filter: drop-shadow(0 0 0 rgba(215, 168, 76, 0));
+      }
+      50% {
+        filter: drop-shadow(0 0 7px rgba(215, 168, 76, 0.48));
+      }
+    }
+
+    @keyframes orbitSparkle {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(0.6) rotate(0deg);
+      }
+      35%, 65% {
+        opacity: 0.9;
+        transform: scale(1) rotate(20deg);
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+        align-items: start;
+      }
+
+      .card {
+        border-radius: 18px;
+      }
+
+      .image-wrap {
+        padding: 7px;
+      }
+
+      .image-wrap img {
+        border-radius: 11px;
+      }
+
+      .content {
+        padding: 24px 16px 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      h1,
+      h1::after,
+      .rating,
+      .rating::before,
+      .rating::after,
+      .rating label {
+        transition: none;
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="card" aria-labelledby="page-title">
+      <div class="image-wrap">
+        <img
+          src="https://i.imgur.com/MFSuvhj.jpeg"
+          alt="Your soulmate details"
+          loading="eager"
+          decoding="async"
+        >
+      </div>
+
+      <div class="content">
+        <h1 id="page-title">Your Soulmate Details</h1>
+        <p class="prompt">How was this result?</p>
+
+        <div class="rating" role="radiogroup" aria-label="Rate this result from 1 to 5 stars">
+          <input type="radio" id="star-5" name="rating" value="5">
+          <label for="star-5" title="5 stars" aria-label="5 stars">★</label>
+
+          <input type="radio" id="star-4" name="rating" value="4">
+          <label for="star-4" title="4 stars" aria-label="4 stars">★</label>
+
+          <input type="radio" id="star-3" name="rating" value="3">
+          <label for="star-3" title="3 stars" aria-label="3 stars">★</label>
+
+          <input type="radio" id="star-2" name="rating" value="2">
+          <label for="star-2" title="2 stars" aria-label="2 stars">★</label>
+
+          <input type="radio" id="star-1" name="rating" value="1">
+          <label for="star-1" title="1 star" aria-label="1 star">★</label>
+        </div>
+        <p class="rating-status" id="rating-status" aria-live="polite"></p>
+
+        <form class="feedback-form" id="feedback-form">
+          <label class="feedback-label" for="feedback">Share your thoughts</label>
+          <textarea
+            class="feedback-input"
+            id="feedback"
+            name="feedback"
+            placeholder="Tell us what you felt about your soulmate result..."
+            maxlength="500"
+            required
+          ></textarea>
+          <button class="submit-button" type="submit">Send Your Feedback</button>
+          <p class="feedback-status" id="feedback-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const ratingInputs = document.querySelectorAll('input[name="rating"]');
+    const ratingStatus = document.getElementById('rating-status');
+    const feedbackForm = document.getElementById('feedback-form');
+    const feedbackInput = document.getElementById('feedback');
+    const feedbackStatus = document.getElementById('feedback-status');
+
+    ratingInputs.forEach((input) => {
+      input.addEventListener('change', () => {
+        const stars = Number(input.value);
+        ratingStatus.textContent = `Thanks for rating ${stars} ${stars === 1 ? 'star' : 'stars'}!`;
+      });
+    });
+
+    feedbackForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      feedbackStatus.textContent = 'Thank you for sharing your thoughts ✦';
+      feedbackInput.value = '';
+    });
+  </script>
+</body>
+</html>
